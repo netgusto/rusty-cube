@@ -6,8 +6,6 @@ import { memory } from "cube/cube_bg";
 
 const universe = wasm.Universe.new();
 const verticesPtr = universe.vertices();
-// const vertices = new Float32Array(memory.buffer, verticesPtr, universe.nb_vertices() * 2);
-// console.log(vertices);
 
 const myTypeset = {
     'jBinary.all': 'Vertices',
@@ -24,11 +22,16 @@ const myTypeset = {
 
 const binary = new jBinary(memory.buffer, myTypeset);
 const vertices = binary.slice(verticesPtr, verticesPtr + universe.nb_vertices() * universe.size_vertex());
-console.log(vertices.readAll(), universe.nb_vertices());
 
 const canvas = document.getElementById('canvas');
-canvas.height = 1000;
-canvas.width = 1000;
+canvas.height = window.innerHeight - 10;
+canvas.width = window.innerWidth - 10;
+
+window.addEventListener('resize', function() {
+    console.log('laaaaaaa');
+    canvas.height = window.innerHeight - 10;
+    canvas.width = window.innerWidth - 10;
+});
 
 const ctx = canvas.getContext("2d");
 const raf = window.requestAnimationFrame;
@@ -47,14 +50,12 @@ const render = () => {
 
     for (let i = 0; i < nbVertices; i++) {
         const p = vertices.read('Vertex3');
-        // console.log(p);
         const proximity = (p.z + 200) / 200;
         ctx.fillStyle = 'rgba(255, 0, 0, ' + proximity + ')'
-        const diameter = 5 + proximity * 2;
-        // const diameter = 4;
-        // ctx.fillRect(p.x + 300, p.y + 300, diameter, diameter);
+        const diameter = 5 + proximity * 4;
+    
         ctx.beginPath();
-        ctx.arc(p.x + 300, p.y + 300, diameter, 0, 2*Math.PI, false);
+        ctx.arc(p.x + canvas.width / 2, p.y + canvas.height / 2, diameter, 0, 2*Math.PI, false);
         ctx.fill();
     }
 };
