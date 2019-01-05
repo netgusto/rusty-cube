@@ -14,16 +14,17 @@ const myTypeset = {
 
     // wasm is Little-Endian; https://github.com/WebAssembly/design/blob/master/Portability.md
     'jBinary.littleEndian': true,
-    Vertex2: {
+    Vertex3: {
         x: 'float',
         y: 'float',
+        z: 'float',
     },
-    Vertices: ['array', 'Vertex2'],
+    Vertices: ['array', 'Vertex3'],
 };
 
 const binary = new jBinary(memory.buffer, myTypeset);
 const vertices = binary.slice(verticesPtr, verticesPtr + universe.nb_vertices() * universe.size_vertex());
-// console.log(verticesSlice.readAll());
+console.log(vertices.readAll(), universe.nb_vertices());
 
 const canvas = document.getElementById('canvas');
 canvas.height = 1000;
@@ -38,14 +39,23 @@ const render = () => {
 
     ctx.strokeStyle = '#000000';
     ctx.fillStyle = '#FF0000';
+    ctx.lineWidth = 2;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const nbVertices = universe.nb_vertices();
     vertices.seek(0);
 
     for (let i = 0; i < nbVertices; i++) {
-        const p = vertices.read('Vertex2');
-        ctx.fillRect(p.x, p.y, 3, 3);
+        const p = vertices.read('Vertex3');
+        // console.log(p);
+        const proximity = (p.z + 200) / 200;
+        ctx.fillStyle = 'rgba(255, 0, 0, ' + proximity + ')'
+        const diameter = 5 + proximity * 2;
+        // const diameter = 4;
+        // ctx.fillRect(p.x + 300, p.y + 300, diameter, diameter);
+        ctx.beginPath();
+        ctx.arc(p.x + 300, p.y + 300, diameter, 0, 2*Math.PI, false);
+        ctx.fill();
     }
 };
 
