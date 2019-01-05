@@ -1,54 +1,28 @@
-<meta charset="utf-8"/>
+# rusty-cube
 
-# 🦀🕸️ `wasm-pack-template`
+Canvas cube spinned by Rust via WASM.
 
-A template for kick starting a Rust and WebAssembly project using
-[`wasm-pack`](https://github.com/rustwasm/wasm-pack).
+## install and build
 
-This template is designed for compiling Rust libraries into WebAssembly and
-publishing the resulting package to NPM.
-
-* Want to use the published NPM package in a Website? [Check out
-  `create-wasm-app`.](https://github.com/rustwasm/create-wasm-app)
-* Want to make a monorepo-style Website without publishing to NPM? Check out
-  [`rust-webpack-template`](https://github.com/rustwasm/rust-webpack-template)
-  and/or
-  [`rust-parcel-template`](https://github.com/rustwasm/rust-parcel-template).
-
-## 🔋 Batteries Included
-
-* [`wasm-bindgen`](https://github.com/rustwasm/wasm-bindgen) for communicating
-  between WebAssembly and JavaScript.
-* [`console_error_panic_hook`](https://github.com/rustwasm/console_error_panic_hook)
-  for logging panic messages to the developer console.
-* [`wee_alloc`](https://github.com/rustwasm/wee_alloc), an allocator optimized
-  for small code size.
-
-## 🚴 Usage
-
-### 🐑 Use `cargo generate` to Clone this Template
-
-[Learn more about `cargo generate` here.](https://github.com/ashleygwilliams/cargo-generate)
-
-```
-cargo generate --git https://github.com/rustwasm/wasm-pack-template.git --name my-project
-cd my-project
+```bash
+$ wasm-pack build --debug
+$ cd pkg && npm link
+$ cd ..
+$ cd www && npm install
+$ npm link cube
+$ npm start
+# now open http://127.0.0.1:8080 in a wasm-enabled browser
 ```
 
-### 🛠️ Build with `wasm-pack build`
+## develop
 
-```
-wasm-pack build
-```
+First, install and build. Then:
 
-### 🔬 Test in Headless Browsers with `wasm-pack test`
+```bash
+# to build-watch rust, at the root of the project
+shell_1 $> fswatch -o -r ./src|xargs -I {} wasm-pack build --debug
 
-```
-wasm-pack test --headless --firefox
-```
-
-### 🎁 Publish to NPM with `wasm-pack publish`
-
-```
-wasm-pack publish
+# in another shell, to build-watch js
+# in dir www/
+shell_2 $> npm start
 ```
