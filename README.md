@@ -2,6 +2,10 @@
 
 Canvas cube spinned by Rust via WASM.
 
+## Rust WASM toolchain
+
+First, install a rust+wasm toolchain by following these instructions: https://rustwasm.github.io/book/game-of-life/setup.html
+
 ## install and build
 
 ```bash
